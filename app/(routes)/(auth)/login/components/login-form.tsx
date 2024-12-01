@@ -152,6 +152,7 @@ export function UserAuthForm() {
         <Button
           variant="outline"
           className="w-full"
+          disabled={isLoading}
           type="button"
           onClick={() => onGitHubLogin()}
         >
