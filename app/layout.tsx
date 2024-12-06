@@ -1,7 +1,8 @@
+import './styles/globals.css';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
-import './styles/globals.css';
+import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 
 const geistSans = localFont({
@@ -35,7 +36,9 @@ export default function RootLayout({
         )}
       >
         <div className="relative flex flex-col">{children}</div>
+        <Toaster />
       </body>
     </html>
   );
 }
+
