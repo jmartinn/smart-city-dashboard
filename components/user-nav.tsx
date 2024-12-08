@@ -1,4 +1,5 @@
 import { ExitIcon } from '@radix-ui/react-icons';
+import Link from 'next/link';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -43,32 +44,32 @@ export async function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer">
-            Profile
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            Billing
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            New Team
-          </DropdownMenuItem>
+          <Link href="/settings/profile">
+            <DropdownMenuItem className="cursor-pointer">
+              Profile
+              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/settings">
+            <DropdownMenuItem className="cursor-pointer">
+              Account Settings
+              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer text-red-600 focus:bg-red-100 focus:text-red-600 dark:focus:bg-red-900 dark:focus:text-red-100">
-          <ExitIcon className="mr-2 size-4" />
           <form
-            action={async formData => {
+            action={async () => {
               'use server';
               await signOut();
             }}
+            className="flex w-full items-center"
           >
-            <button type="submit">Sign out</button>
+            <button type="submit" className="flex w-full items-center">
+              <ExitIcon className="mr-2 size-4" />
+              Sign out
+            </button>
           </form>
         </DropdownMenuItem>
       </DropdownMenuContent>
