@@ -10,21 +10,21 @@ import {
 } from '@/components/ui/chart';
 
 const chartData = [
-  { name: 'Jan', renewable: 4000, nonRenewable: 2400 },
-  { name: 'Feb', renewable: 3000, nonRenewable: 1398 },
-  { name: 'Mar', renewable: 2000, nonRenewable: 9800 },
-  { name: 'Apr', renewable: 2780, nonRenewable: 3908 },
-  { name: 'May', renewable: 1890, nonRenewable: 4800 },
-  { name: 'Jun', renewable: 2390, nonRenewable: 3800 },
+  { month: 'Jan', renewable: 4000, nonRenewable: 2400 },
+  { month: 'Feb', renewable: 3000, nonRenewable: 1398 },
+  { month: 'Mar', renewable: 2000, nonRenewable: 9800 },
+  { month: 'Apr', renewable: 2780, nonRenewable: 3908 },
+  { month: 'May', renewable: 1890, nonRenewable: 4800 },
+  { month: 'Jun', renewable: 2390, nonRenewable: 3800 },
 ];
 
 const chartConfig = {
-  desktop: {
-    label: 'Desktop',
+  renewable: {
+    label: 'Renewable',
     color: 'hsl(var(--chart-1))',
   },
-  mobile: {
-    label: 'Mobile',
+  nonRenewable: {
+    label: 'Not',
     color: 'hsl(var(--chart-2))',
   },
 } satisfies ChartConfig;
@@ -35,7 +35,7 @@ export function EnergyProduction() {
       <BarChart accessibilityLayer data={chartData}>
         <CartesianGrid vertical={false} />
         <XAxis
-          dataKey="name"
+          dataKey="month"
           tickLine={false}
           tickMargin={10}
           axisLine={false}
@@ -43,10 +43,38 @@ export function EnergyProduction() {
         />
         <ChartTooltip
           cursor={false}
-          content={<ChartTooltipContent indicator="dashed" />}
+          content={
+            <ChartTooltipContent
+              hideLabel
+              className="w-[180px]"
+              formatter={(value, name, item, index) => (
+                <>
+                  <div
+                    className="size-2.5 shrink-0 rounded-[2px] bg-[--color-bg]"
+                    style={
+                      {
+                        '--color-bg': `var(--color-${name})`,
+                      } as React.CSSProperties
+                    }
+                  />
+                  {chartConfig[name as keyof typeof chartConfig]?.label || name}
+                  <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
+                    {value}
+                    <span className="font-normal text-muted-foreground">
+                      kWh
+                    </span>
+                  </div>
+                </>
+              )}
+            />
+          }
         />
-        <Bar dataKey="renewable" fill="var(--color-desktop)" radius={4} />
-        <Bar dataKey="nonRenewable" fill="var(--color-mobile)" radius={4} />
+        <Bar dataKey="renewable" fill="var(--color-renewable)" radius={4} />
+        <Bar
+          dataKey="nonRenewable"
+          fill="var(--color-nonRenewable)"
+          radius={4}
+        />
       </BarChart>
     </ChartContainer>
   );
