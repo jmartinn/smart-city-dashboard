@@ -14,6 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { navConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
 
 export function MobileNav() {
@@ -37,34 +38,19 @@ export function MobileNav() {
         <Separator className="my-4" />
         <div className="my-4 h-[calc(100vh-8rem)] pb-10">
           <div className="flex flex-col space-y-2">
-            <MobileLink
-              href={'/'}
-              onOpenChange={setOpen}
-              className={cn('transition-colors')}
-            >
-              Overview
-            </MobileLink>
-            <MobileLink
-              href={'/'}
-              onOpenChange={setOpen}
-              className={cn('transition-colors')}
-            >
-              Customers
-            </MobileLink>
-            <MobileLink
-              href={'/'}
-              onOpenChange={setOpen}
-              className={cn('transition-colors')}
-            >
-              Products
-            </MobileLink>
-            <MobileLink
-              href={'/'}
-              onOpenChange={setOpen}
-              className={cn('transition-colors')}
-            >
-              Settings
-            </MobileLink>
+            {navConfig.mainNav.map(
+              (item, _i) =>
+                item.href && (
+                  <MobileLink
+                    key={item.href}
+                    href={!item.disabled ? item.href : '#'}
+                    onOpenChange={setOpen}
+                    className={cn('transition-colors')}
+                  >
+                    {item.title}
+                  </MobileLink>
+                )
+            )}
           </div>
         </div>
       </SheetContent>
@@ -94,7 +80,7 @@ function MobileLink({
       className={cn('rounded-md px-3 py-1 hover:bg-accent', className)}
       {...props}
     >
-      <div className="text-sidebar-foreground px-1 text-sm">{children}</div>
+      <div className="px-1 text-sm text-sidebar-foreground">{children}</div>
     </Link>
   );
 }
