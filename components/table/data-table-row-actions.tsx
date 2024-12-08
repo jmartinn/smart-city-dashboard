@@ -37,15 +37,20 @@ export function DataTableRowActions<TData>({
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem
+          className="cursor-pointer"
           onClick={() => navigator.clipboard.writeText(data.id.toString())}
         >
           Copy ID
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         {/* TODO: Handle 'View details' route / page*/}
-        <DropdownMenuItem>View details</DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
+          View details
+        </DropdownMenuItem>
         {/* NOTE: This can be deleted later as we don't plan to interact with the data*/}
-        <DropdownMenuItem>Edit data</DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
+          Edit data
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
