@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronDown } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -20,10 +21,10 @@ import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 const appearanceFormSchema = z.object({
-  theme: z.enum(['light', 'dark'], {
+  theme: z.enum(['light', 'dark', 'system'], {
     required_error: 'Please select a theme.',
   }),
-  font: z.enum(['inter', 'manrope', 'system'], {
+  font: z.enum(['inter', 'geist', 'system'], {
     invalid_type_error: 'Select a font',
     required_error: 'Please select a font.',
   }),
@@ -31,20 +32,21 @@ const appearanceFormSchema = z.object({
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
-// This can come from your database or API.
-const defaultValues: Partial<AppearanceFormValues> = {
-  theme: 'light',
-};
-
 export function AppearanceForm() {
+  const { theme, setTheme } = useTheme();
+
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
-    defaultValues,
+    defaultValues: {
+      theme: (theme as 'light' | 'dark' | 'system') || 'system',
+      font: 'geist',
+    },
   });
 
   function onSubmit(data: AppearanceFormValues) {
+    setTheme(data.theme);
     toast({
-      title: 'You submitted the following values:',
+      title: 'Appearance updated',
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
@@ -69,10 +71,11 @@ export function AppearanceForm() {
                       buttonVariants({ variant: 'outline' }),
                       'w-[200px] appearance-none font-normal'
                     )}
+                    disabled
                     {...field}
                   >
+                    <option value="geist">Geist</option>
                     <option value="inter">Inter</option>
-                    <option value="manrope">Manrope</option>
                     <option value="system">System</option>
                   </select>
                 </FormControl>
