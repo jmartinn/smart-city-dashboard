@@ -25,37 +25,31 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-model MontlyConsumption {
-  id           Int    @id @default(autoincrement())
-  month        String
-  renewable    Float
-  nonRenewable Float
+model EnergyData {
+  id                 Int                 @id @default(autoincrement())
+  weekStartDate      DateTime
+  year               Int
+  month              Int // 1 - January, 2 - February, etc.
+  week               Int // Week number within the month
+  renewableEnergy    Float // in GWh
+  nonRenewableEnergy Float // in GWh
+  totalConsumption   Float // in GWh
+  carbonEmissions    Float // in kT
+  costSavings        Float // in USD
+  sectors            SectorConsumption[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@unique([year, month, week])
+  @@index([year, month])
 }
 
-model DailyConsumption {
-  id          Int      @id @default(autoincrement())
-  date        DateTime
-  consumption Float
-  production  Float
-  emissions   Float
-  sector      Sector
+model SectorConsumption {
+  id           Int        @id @default(autoincrement())
+  sector       Sector
+  consumption  Float // in GWh
+  energyData   EnergyData @relation(fields: [energyDataId], references: [id])
+  energyDataId Int
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model WeeklyConsumption {
-  id          Int   @id @default(autoincrement())
-  week        Int
-  consumption Float
-  production  Float
-  emissions   Float
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@index([energyDataId])
 }
 
 enum Sector {
