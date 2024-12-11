@@ -13,7 +13,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { auth, signOut } from '@/lib/auth';
+import { auth, signOut } from '@/lib/auth/auth';
 
 export async function UserNav() {
   const session = await auth();
