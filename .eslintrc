@@ -5,10 +5,7 @@
     "plugin:prettier/recommended",
     "plugin:tailwindcss/recommended"
   ],
-  "plugins": [
-    "import",
-    "tailwindcss"
-  ],
+  "plugins": ["import", "tailwindcss"],
   "settings": {
     "tailwindcss": {
       "callees": ["cn", "cva"],
@@ -16,27 +13,18 @@
     }
   },
   "rules": {
+    "@next/next/no-html-link-for-pages": "off",
     "import/order": [
       "error",
       {
         "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
-        "pathGroups": [
-          {
-            "pattern": "react",
-            "group": "external",
-            "position": "before"
-          }
-        ],
+        "pathGroups": [{ "pattern": "react", "group": "external", "position": "before" }],
         "pathGroupsExcludedImportTypes": ["react"],
         "newlines-between": "always",
-        "alphabetize": {
-          "order": "asc",
-          "caseInsensitive": true
-        }
+        "alphabetize": { "order": "asc", "caseInsensitive": true }
       }
     ],
-    "@next/next/no-html-link-for-pages": "off",
-    "tailwindcss/no-custom-classname": "off",
-    "tailwindcss/classnames-order": "error"
+    "tailwindcss/classnames-order": "error",
+    "tailwindcss/no-custom-classname": "off"
   }
 }
