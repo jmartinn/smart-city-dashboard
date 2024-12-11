@@ -1,7 +1,10 @@
-import { EnergyProduction } from '@/components/charts/energy-production';
-import { EnergySector } from '@/components/charts/energy-sector';
+import { Suspense } from 'react';
+
+import { getWeeklyData } from '@/app/api/actions';
 import { CalendarDateRangePicker } from '@/components/date-range-picker';
-import { EnergySummary } from '@/components/summary-cards';
+import { EnergyProductionSkeleton } from '@/components/skeletons/energy-production-skeleton';
+import { EnergySectorSkeleton } from '@/components/skeletons/energy-sector-skeleton';
+import { EnergySummarySkeleton } from '@/components/skeletons/summary-cards-skeleton';
 import { columns } from '@/components/table/columns';
 import { DataTable } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
@@ -13,10 +16,16 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { generateMockData } from '@/lib/utils';
+import { EnergyProductionWrapper } from '@/components/wrappers/energy-production-wrapper';
+import { EnergySectorWrapper } from '@/components/wrappers/energy-sector-wrapper';
+import { EnergySummaryWrapper } from '@/components/wrappers/summary-cards-wrapper';
 
-export default function Home() {
-  const data = generateMockData(1000);
+export default async function Home() {
+  const { data, nextCursor } = await getWeeklyData(
+    new Date('2024-01-01'),
+    new Date('2024-12-31')
+  );
+
   return (
     <div className="space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
@@ -32,22 +41,27 @@ export default function Home() {
           <TabsTrigger value="analytics" disabled>
             Analytics
           </TabsTrigger>
-          <TabsTrigger value="details" disabled>
-            Details
-          </TabsTrigger>
+          <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="notifications" disabled>
             Notifications
           </TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
-          <EnergySummary />
+          <Suspense fallback={<EnergySummarySkeleton />}>
+            <EnergySummaryWrapper />
+          </Suspense>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Card className="col-span-4">
               <CardHeader>
                 <CardTitle>Energy Production</CardTitle>
+                <CardDescription>
+                  View a summary of the energy production
+                </CardDescription>
               </CardHeader>
               <CardContent className="pl-2">
-                <EnergyProduction />
+                <Suspense fallback={<EnergyProductionSkeleton />}>
+                  <EnergyProductionWrapper />
+                </Suspense>
               </CardContent>
             </Card>
             <Card className="col-span-4 lg:col-span-3">
@@ -58,10 +72,14 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <EnergySector />
+                <Suspense fallback={<EnergySectorSkeleton />}>
+                  <EnergySectorWrapper />
+                </Suspense>
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+        <TabsContent value="details">
           <div className="space-y-4">
             <DataTable columns={columns} data={data} />
           </div>
