@@ -10,6 +10,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "cypress:open": "cypress open",
+    "postinstall": "prisma generate",
     "prepare": "husky"
   },
   "dependencies": {
