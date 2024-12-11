@@ -25,8 +25,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { toast } from '@/hooks/use-toast';
-import { GitHubLogin } from '@/lib/auth/auth-action';
+import { GitHubLogin, CredentialsLogin } from '@/lib/auth/auth-action';
 
 const formSchema = z.object({
   email: z.string().email({
@@ -49,20 +48,7 @@ export function UserAuthForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      // TODO: Handle credentials login.
-      toast({
-        title: 'You submitted the following values:',
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(values, null, 2)}
-            </code>
-          </pre>
-        ),
-      });
-    }, 3000);
+    await CredentialsLogin(values);
   }
 
   async function onGitHubLogin() {
@@ -88,7 +74,11 @@ export function UserAuthForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="name@example.com" {...field} />
+                    <Input
+                      placeholder="name@example.com"
+                      disabled={isLoading}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -112,6 +102,7 @@ export function UserAuthForm() {
                     <div className="relative">
                       <Input
                         type={showPassword ? 'text' : 'password'}
+                        disabled={isLoading}
                         {...field}
                       />
                       <Button
