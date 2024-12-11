@@ -1,4 +1,4 @@
-import type { MonthlySummary } from '@/lib/schemas/energy-schema';
+import { IEnergyMonthlyData } from '@/lib/schemas/energy';
 
 /**
  * Formats a numerical value with its associated unit.
@@ -31,8 +31,8 @@ export function calculateChange(current: number, previous: number): string {
  * @returns An array of summary cards.
  */
 export function transformToSummaryCards(
-  current: MonthlySummary,
-  previous: MonthlySummary
+  current: IEnergyMonthlyData,
+  previous: IEnergyMonthlyData
 ) {
   return [
     {
@@ -66,4 +66,3 @@ export function transformToSummaryCards(
     },
   ];
 }
-
