@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 
-import { getWeeklyData } from '@/app/api/actions';
 import { CalendarDateRangePicker } from '@/components/date-range-picker';
 import { EnergyProductionSkeleton } from '@/components/skeletons/energy-production-skeleton';
 import { EnergySectorSkeleton } from '@/components/skeletons/energy-sector-skeleton';
@@ -19,9 +18,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { EnergyProductionWrapper } from '@/components/wrappers/energy-production-wrapper';
 import { EnergySectorWrapper } from '@/components/wrappers/energy-sector-wrapper';
 import { EnergySummaryWrapper } from '@/components/wrappers/summary-cards-wrapper';
+import { getWeeklyData } from '@/lib/db/actions/energy-actions';
 
 export default async function Home() {
-  const { data, nextCursor } = await getWeeklyData(
+  const { data, cursor } = await getWeeklyData(
     new Date('2024-01-01'),
     new Date('2024-12-31')
   );
