@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
-import { energyDtilSchema } from '@/lib/schemas';
+import { energyWeeklySchema } from '@/lib/schemas/energy';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -21,7 +21,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const data = energyDtilSchema.parse(row.original);
+  const data = energyWeeklySchema.parse(row.original);
 
   return (
     <DropdownMenu>

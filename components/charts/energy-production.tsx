@@ -8,7 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { EnergyProd } from '@/lib/schemas';
+import type { TEnergyProductionData } from '@/lib/schemas/energy';
 
 const chartConfig = {
   renewable: {
@@ -22,7 +22,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 interface Props {
-  data: EnergyProd[];
+  data: TEnergyProductionData[];
 }
 
 export function EnergyProduction({ data }: Props) {

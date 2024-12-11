@@ -10,7 +10,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { SectorCons } from '@/lib/schemas';
+import { TEnergySectorData } from '@/lib/schemas/energy';
 
 const chartConfig = {
   consumption: {
@@ -35,7 +35,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 interface Props {
-  data: SectorCons[];
+  data: TEnergySectorData[];
 }
 
 export function EnergySector({ data }: Props) {

@@ -1,7 +1,7 @@
 import { Battery, Leaf, Zap, DollarSign } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { SummryCard } from '@/lib/schemas';
+import { TEnergySummaryData } from '@/lib/schemas/energy';
 
 const iconMap = {
   'Total Energy Consumption': Zap,
@@ -11,7 +11,7 @@ const iconMap = {
 };
 
 interface Props {
-  data: SummryCard[];
+  data: TEnergySummaryData[];
 }
 
 export function EnergySummary({ data }: Props) {

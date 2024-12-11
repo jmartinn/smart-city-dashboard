@@ -1,10 +1,10 @@
 import { use } from 'react';
 
-import { getSectorConsumption } from '@/app/api/actions';
 import { EnergySector } from '@/components/charts/energy-sector';
-import { SectorCons } from '@/lib/schemas';
+import { getSectorConsumption } from '@/lib/db/actions/energy-actions';
+import type { TEnergySectorData } from '@/lib/schemas/energy';
 
-async function fetchSectorData(): Promise<SectorCons[]> {
+async function fetchSectorData(): Promise<TEnergySectorData[]> {
   const currentDate = new Date();
   return getSectorConsumption(currentDate);
 }

@@ -1,10 +1,10 @@
 import { use } from 'react';
 
-import { getEnergyProductionData } from '@/app/api/actions';
 import { EnergyProduction } from '@/components/charts/energy-production';
-import { EnergyProd } from '@/lib/schemas';
+import { getEnergyProductionData } from '@/lib/db/actions/energy-actions';
+import type { TEnergyProductionData } from '@/lib/schemas/energy';
 
-async function fetchProductionData(): Promise<EnergyProd[]> {
+async function fetchProductionData(): Promise<TEnergyProductionData[]> {
   const endDate = new Date();
   return getEnergyProductionData(endDate);
 }
