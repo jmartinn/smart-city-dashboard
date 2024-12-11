@@ -44,12 +44,6 @@ export async function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link href="/settings">
-            <DropdownMenuItem className="cursor-pointer">
-              Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          </Link>
           <Link href="/settings/account">
             <DropdownMenuItem className="cursor-pointer">
               Account Settings

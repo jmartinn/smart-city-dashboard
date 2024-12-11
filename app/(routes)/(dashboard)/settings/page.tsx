@@ -1,18 +1,26 @@
 import { Separator } from '@/components/ui/separator';
+import { auth } from '@/lib/auth/auth';
 
-import { ProfileForm } from './components/profile-form';
+import { AccountForm } from './components/account-form';
 
-export default function SettingsProfilePage() {
+export default async function SettingsAccountPage() {
+  const session = await auth();
+
+  const defaultValues = {
+    name: session?.user?.name!,
+    email: session?.user?.email!,
+  };
+
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">Profile</h3>
+        <h3 className="text-lg font-medium">Account</h3>
         <p className="text-sm text-muted-foreground">
-          This is how others will see you on the site.
+          Update your account settings. Set your email, name and more.
         </p>
       </div>
       <Separator />
-      <ProfileForm />
+      <AccountForm defaultValues={defaultValues} />
     </div>
   );
 }
