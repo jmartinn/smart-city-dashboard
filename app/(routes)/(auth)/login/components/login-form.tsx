@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { toast } from '@/hooks/use-toast';
 import { GitHubLogin } from '@/lib/auth/auth-action';
 
 const formSchema = z.object({
@@ -48,11 +49,19 @@ export function UserAuthForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-
     setTimeout(() => {
       setIsLoading(false);
       // TODO: Handle credentials login.
-      console.log(values);
+      toast({
+        title: 'You submitted the following values:',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              {JSON.stringify(values, null, 2)}
+            </code>
+          </pre>
+        ),
+      });
     }, 3000);
   }
 
