@@ -32,13 +32,13 @@ model EnergyData {
   id                 Int                 @id @default(autoincrement())
   weekStartDate      DateTime
   year               Int
-  month              Int // 1 - January, 2 - February, etc.
-  week               Int // Week number within the month
-  renewableEnergy    Float // in GWh
-  nonRenewableEnergy Float // in GWh
-  totalConsumption   Float // in GWh
-  carbonEmissions    Float // in kT
-  costSavings        Float // in USD
+  month              Int
+  week               Int
+  renewableEnergy    Float
+  nonRenewableEnergy Float
+  totalConsumption   Float
+  carbonEmissions    Float
+  costSavings        Float
   sectors            SectorConsumption[]
 
   @@unique([year, month, week])
@@ -48,7 +48,7 @@ model EnergyData {
 model SectorConsumption {
   id           Int        @id @default(autoincrement())
   sector       Sector
-  consumption  Float // in GWh
+  consumption  Float
   energyData   EnergyData @relation(fields: [energyDataId], references: [id])
   energyDataId Int
 
