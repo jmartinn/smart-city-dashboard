@@ -2,12 +2,12 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 
-import type { EnergyData } from '@/schemas/consumption';
+import type { TEnergyWeeklyData } from '@/lib/schemas/energy';
 
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
 
-export const columns: ColumnDef<EnergyData>[] = [
+export const columns: ColumnDef<TEnergyWeeklyData>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => (
