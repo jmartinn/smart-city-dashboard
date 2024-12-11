@@ -10,17 +10,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-
-const chartData = [
-  { sector: 'residential', consumption: 35, fill: 'var(--color-residential)' },
-  { sector: 'commercial', consumption: 30, fill: 'var(--color-commercial)' },
-  { sector: 'industrial', consumption: 25, fill: 'var(--color-industrial)' },
-  {
-    sector: 'transportation',
-    consumption: 10,
-    fill: 'var(--color-transportation)',
-  },
-];
+import { SectorCons } from '@/lib/schemas';
 
 const chartConfig = {
   consumption: {
@@ -44,7 +34,16 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function EnergySector() {
+interface Props {
+  data: SectorCons[];
+}
+
+export function EnergySector({ data }: Props) {
+  const chartData = data.map(item => ({
+    ...item,
+    fill: `var(--color-${item.sector.toLowerCase()})`,
+  }));
+
   return (
     <ChartContainer
       config={chartConfig}

@@ -8,15 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-
-const chartData = [
-  { month: 'Jan', renewable: 4000, nonRenewable: 2400 },
-  { month: 'Feb', renewable: 3000, nonRenewable: 1398 },
-  { month: 'Mar', renewable: 2000, nonRenewable: 9800 },
-  { month: 'Apr', renewable: 2780, nonRenewable: 3908 },
-  { month: 'May', renewable: 1890, nonRenewable: 4800 },
-  { month: 'Jun', renewable: 2390, nonRenewable: 3800 },
-];
+import { EnergyProd } from '@/lib/schemas';
 
 const chartConfig = {
   renewable: {
@@ -29,10 +21,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function EnergyProduction() {
+interface Props {
+  data: EnergyProd[];
+}
+
+export function EnergyProduction({ data }: Props) {
   return (
     <ChartContainer config={chartConfig}>
-      <BarChart accessibilityLayer data={chartData}>
+      <BarChart accessibilityLayer data={data}>
         <CartesianGrid vertical={false} />
         <XAxis
           dataKey="month"
