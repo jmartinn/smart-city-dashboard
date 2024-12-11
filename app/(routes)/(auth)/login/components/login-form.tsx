@@ -25,7 +25,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { GitHubLogin } from '@/lib/auth-action';
+import { GitHubLogin } from '@/lib/auth/auth-action';
 
 const formSchema = z.object({
   email: z.string().email({
