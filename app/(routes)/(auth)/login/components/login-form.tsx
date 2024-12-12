@@ -72,9 +72,10 @@ export function UserAuthForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel htmlFor="email">Email</FormLabel>
                   <FormControl>
                     <Input
+                      id="email"
                       placeholder="name@example.com"
                       disabled={isLoading}
                       {...field}
@@ -90,7 +91,7 @@ export function UserAuthForm() {
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center justify-between">
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel htmlFor="password">Password</FormLabel>
                     <Link
                       href="#"
                       className="text-sm text-muted-foreground underline-offset-4 hover:underline"
@@ -101,6 +102,7 @@ export function UserAuthForm() {
                   <FormControl>
                     <div className="relative">
                       <Input
+                        id="password"
                         type={showPassword ? 'text' : 'password'}
                         disabled={isLoading}
                         {...field}
