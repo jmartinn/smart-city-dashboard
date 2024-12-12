@@ -15,9 +15,9 @@ import type {
 } from '@/lib/schemas/energy';
 
 /**
- * Retrieves aggregated energy data for a specific month.
- * @param date - The date representing the month.
- * @returns Aggregated energy data for the month.
+ * Retrieves aggregated energy metrics for a specific month.
+ * @param date - The date representing the target month
+ * @returns Promise<IEnergyMonthlyData> Monthly aggregated data including consumption, renewable energy, emissions, and cost savings
  */
 export async function fetchMonthlySummary(
   date: Date
@@ -49,9 +49,9 @@ export async function fetchMonthlySummary(
 }
 
 /**
- * Fetches energy production data for the past six months, grouped by month.
- * @param endDate - The ending date for the data retrieval.
- * @returns An array of energy production data by month.
+ * Fetches monthly energy production data for a 6-month period.
+ * @param endDate - The ending date for the data retrieval period
+ * @returns Promise<TEnergyProductionData[]> Monthly production data with renewable and non-renewable energy values
  */
 export async function fetchEnergyProduction(
   endDate: Date
@@ -112,6 +112,14 @@ export async function fetchSectorConsumption(
   }));
 }
 
+/**
+ * Retrieves paginated weekly energy data within a date range.
+ * @param startDate - Start of the date range
+ * @param endDate - End of the date range
+ * @param page - Page number (1-based)
+ * @param pageSize - Number of records per page
+ * @returns Promise containing paginated data and metadata
+ */
 export async function fetchPaginatedWeeklyData(
   startDate: Date,
   endDate: Date,

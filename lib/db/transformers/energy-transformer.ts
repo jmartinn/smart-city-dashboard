@@ -1,10 +1,10 @@
 import { IEnergyMonthlyData } from '@/lib/schemas/energy';
 
 /**
- * Formats a numerical value with its associated unit.
- * @param value - The numerical value to format.
- * @param unit - The unit of measurement.
- * @returns The formatted value as a string.
+ * Formats a numerical value with its associated unit of measurement.
+ * @param value - The numerical value to format
+ * @param unit - The unit of measurement ('$', 'GWh', or 'kT')
+ * @returns Formatted string with value and unit (e.g., "$1.5M" or "150.0 GWh")
  */
 export function formatValue(value: number, unit: string): string {
   if (unit === '$') {
@@ -14,10 +14,10 @@ export function formatValue(value: number, unit: string): string {
 }
 
 /**
- * Calculates the percentage change between current and previous values.
- * @param current - The current value.
- * @param previous - The previous value.
- * @returns The percentage change as a formatted string.
+ * Calculates the percentage change between two values.
+ * @param current - The current period value
+ * @param previous - The previous period value
+ * @returns Formatted string with percentage change including sign (e.g., "+5.2%" or "-3.1%")
  */
 export function calculateChange(current: number, previous: number): string {
   const change = ((current - previous) / previous) * 100;
@@ -25,10 +25,10 @@ export function calculateChange(current: number, previous: number): string {
 }
 
 /**
- * Transforms monthly summary data into summary card objects.
- * @param current - The current month's data.
- * @param previous - The previous month's data.
- * @returns An array of summary cards.
+ * Transforms monthly energy data into formatted summary cards.
+ * @param current - The current month's energy metrics
+ * @param previous - The previous month's energy metrics for comparison
+ * @returns Array of summary cards with formatted values and change percentages
  */
 export function transformToSummaryCards(
   current: IEnergyMonthlyData,

@@ -12,9 +12,9 @@ import * as queries from '../queries/energy-queries';
 import { transformToSummaryCards } from '../transformers/energy-transformer';
 
 /**
- * Retrieves data for summary cards based on the provided date.
- * @param date - The target date for fetching summary data.
- * @returns A promise resolving to an array of summary cards.
+ * Retrieves data for summary cards comparing current and previous month's energy metrics.
+ * @param date - The target date for fetching summary data (used to determine current month)
+ * @returns Promise<TEnergySummaryData[]> Array of summary cards containing title, value, and change percentage
  */
 export async function getSummaryCardData(
   date: Date
@@ -26,9 +26,9 @@ export async function getSummaryCardData(
 }
 
 /**
- * Retrieves energy production data up to the specified end date.
- * @param endDate - The target end date for data retrieval.
- * @returns A promise resolving to an array of energy production data.
+ * Retrieves energy production data for the past 6 months up to the specified end date.
+ * @param endDate - The target end date for data retrieval
+ * @returns Promise<TEnergyProductionData[]> Array of monthly energy production data containing renewable and non-renewable values
  */
 export async function getEnergyProductionData(
   endDate: Date
@@ -47,6 +47,15 @@ export async function getSectorConsumption(
   return queries.fetchSectorConsumption(date);
 }
 
+/**
+ * Retrieves weekly energy data with pagination support.
+ * @param startDate - Start date for the data range
+ * @param endDate - End date for the data range
+ * @param page - Page number for pagination (default: 1)
+ * @param pageSize - Number of items per page (default: 10)
+ * @returns Promise containing paginated data, current page info, and total count
+ * @throws Error if data fetching fails
+ */
 export async function getWeeklyData(
   startDate: Date,
   endDate: Date,
