@@ -1,4 +1,5 @@
 # Smart City Energy Dashboard
+![Home Page](https://github.com/user-attachments/assets/b446a6f0-290f-423b-813d-790744fea27a)
 
 A comprehensive dashboard for monitoring and analyzing energy consumption, production, and emissions in smart cities. Empowering sustainable urban development through data-driven insights.
 
