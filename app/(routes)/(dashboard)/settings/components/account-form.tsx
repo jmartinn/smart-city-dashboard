@@ -95,7 +95,7 @@ export function AccountForm({ defaultValues }: AccountFormProps) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input disabled {...field} value={'juamp_m@hotmail.com'} />
+                <Input disabled {...field} />
               </FormControl>
               <FormDescription>
                 You can&apos;t change your email right now, we&apos;ll add a
