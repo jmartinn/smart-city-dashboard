@@ -1,10 +1,9 @@
 'use server';
 
-import { subMonths } from 'date-fns';
+import { subMonths, format } from 'date-fns';
 
 import type {
   TEnergySectorData,
-  IEnergyPaginatedData,
   TEnergyProductionData,
   TEnergySummaryData,
 } from '@/lib/schemas/energy';
@@ -48,19 +47,43 @@ export async function getSectorConsumption(
   return queries.fetchSectorConsumption(date);
 }
 
-/**
- * Retrieves paginated weekly data within the specified date range.
- * @param startDate - The start date of the range.
- * @param endDate - The end date of the range.
- * @param cursor - Optional pagination cursor.
- * @param limit - Optional maximum number of records to fetch.
- * @returns A promise resolving to the paginated weekly data.
- */
 export async function getWeeklyData(
   startDate: Date,
   endDate: Date,
-  cursor?: number | null,
-  limit?: number
-): Promise<IEnergyPaginatedData> {
-  return queries.fetchPaginatedWeeklyData(startDate, endDate, cursor, limit);
+  page: number = 1,
+  pageSize: number = 10
+) {
+  try {
+    const {
+      data,
+      totalCount,
+      page: currentPage,
+      pageSize: currentPageSize,
+    } = await queries.fetchPaginatedWeeklyData(
+      startDate,
+      endDate,
+      page,
+      pageSize
+    );
+
+    const formattedData = data.map(week => ({
+      id: week.id,
+      date: format(week.weekStartDate, 'yyyy-MM-dd'),
+      consumption: parseFloat(week.totalConsumption.toFixed(2)),
+      production: parseFloat(
+        (week.renewableEnergy + week.nonRenewableEnergy).toFixed(2)
+      ),
+      emissions: parseFloat(week.carbonEmissions.toFixed(2)),
+    }));
+
+    return {
+      data: formattedData,
+      page: currentPage,
+      pageSize: currentPageSize,
+      totalCount,
+    };
+  } catch (error) {
+    console.error('Error fetching energy data:', error);
+    throw new Error('Failed to fetch energy data');
+  }
 }
