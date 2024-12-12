@@ -1,22 +1,19 @@
 'use client';
 
-import React from 'react';
+import { useState, useEffect } from 'react';
 
 import {
   ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
   useReactTable,
-  VisibilityState,
+  getPaginationRowModel,
+  SortingState,
+  getSortedRowModel,
 } from '@tanstack/react-table';
+import { useRouter } from 'next/navigation';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
@@ -27,107 +24,151 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import { DataTablePagination } from './data-table-pagination';
-
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  pageCount: number;
+  currentPage: number;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  pageCount,
+  currentPage,
 }: DataTableProps<TData, TValue>) {
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [globalFilter, setGlobalFilter] = React.useState<string>('');
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const router = useRouter();
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
     data,
     columns,
+    pageCount: pageCount,
     state: {
       sorting,
-      columnVisibility,
-      columnFilters,
-      globalFilter,
+      pagination: {
+        pageIndex: currentPage - 1,
+        pageSize: 10,
+      },
     },
-    enableRowSelection: false,
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: 'includesStringSensitive',
-    onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
+    manualPagination: true,
   });
 
+  useEffect(() => {
+    table.setPageIndex(currentPage - 1);
+  }, [currentPage, table]);
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= pageCount) {
+      router.push(`?page=${newPage}`);
+    }
+  };
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Detailed Energy Data</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {/* <DataTableToolbar table={table} /> */}
-        <div className="mt-2">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map(headerGroup => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map(header => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map(row => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                  >
-                    {row.getVisibleCells().map(cell => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
+    <div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Detailed Energy Data</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {/* <DataTableToolbar table={table} /> */}
+          <div className="mt-2">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map(headerGroup => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map(header => {
+                      return (
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      );
+                    })}
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map(row => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                    >
+                      {row.getVisibleCells().map(cell => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          {/* <DataTablePagination table={table} /> */}
+        </CardContent>
+      </Card>
+
+      <div className="flex items-center justify-between space-x-2 py-4">
+        <div>
+          Page {currentPage} of {pageCount}
         </div>
-        <DataTablePagination table={table} />
-      </CardContent>
-    </Card>
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(1)}
+            disabled={currentPage === 1}
+          >
+            First
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === pageCount}
+          >
+            Next
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(pageCount)}
+            disabled={currentPage === pageCount}
+          >
+            Last
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
