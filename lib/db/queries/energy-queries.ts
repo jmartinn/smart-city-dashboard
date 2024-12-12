@@ -11,7 +11,6 @@ import { prisma } from '@/lib/prisma';
 import type {
   TEnergySectorData,
   IEnergyMonthlyData,
-  IEnergyPaginatedData,
   TEnergyProductionData,
 } from '@/lib/schemas/energy';
 
@@ -113,33 +112,27 @@ export async function fetchSectorConsumption(
   }));
 }
 
-/**
- * Fetches paginated weekly energy data within a specific date range.
- * @param startDate - The starting date of the range.
- * @param endDate - The ending date of the range.
- * @param cursor - The pagination cursor (optional).
- * @param limit - The maximum number of records to retrieve (default: 10).
- * @returns Paginated weekly energy data and the next cursor.
- */
 export async function fetchPaginatedWeeklyData(
   startDate: Date,
   endDate: Date,
-  cursor: number | null = null,
-  limit: number = 10
-): Promise<IEnergyPaginatedData> {
-  const [weeklyData, totalCount] = await Promise.all([
+  page: number = 1,
+  pageSize: number = 10
+) {
+  const skip = (page - 1) * pageSize;
+
+  const [data, totalCount] = await Promise.all([
     prisma.energyData.findMany({
       where: {
         weekStartDate: {
           gte: startOfWeek(startDate),
           lte: endOfWeek(endDate),
         },
-        ...(cursor ? { id: { gt: cursor } } : {}),
       },
       orderBy: {
         id: 'asc',
       },
-      take: limit + 1,
+      skip,
+      take: pageSize,
       select: {
         id: true,
         weekStartDate: true,
@@ -149,23 +142,20 @@ export async function fetchPaginatedWeeklyData(
         carbonEmissions: true,
       },
     }),
-    prisma.energyData.count(),
+    prisma.energyData.count({
+      where: {
+        weekStartDate: {
+          gte: startOfWeek(startDate),
+          lte: endOfWeek(endDate),
+        },
+      },
+    }),
   ]);
-
-  const hasNextPage = weeklyData.length > limit;
-  const data = weeklyData.slice(0, limit).map(week => ({
-    id: week.id,
-    date: format(week.weekStartDate, 'yyyy-MM-dd'),
-    consumption: parseFloat(week.totalConsumption.toFixed(2)),
-    production: parseFloat(
-      (week.renewableEnergy + week.nonRenewableEnergy).toFixed(2)
-    ),
-    emissions: parseFloat(week.carbonEmissions.toFixed(2)),
-  }));
 
   return {
     data,
-    cursor: hasNextPage ? weeklyData[limit].id : null,
-    totalRecords: totalCount,
+    page,
+    pageSize,
+    totalCount,
   };
 }
