@@ -3,7 +3,6 @@ import { MainNavItem } from 'types/nav';
 export const siteConfig = {
   name: 'Smart City Energy Dashboard',
   url: 'https://technical-test-jmartinns-projects.vercel.app/',
-  ogImage: 'https://technical-test-jmartinns-projects.vercel.app/og-bg.jpg',
   description:
     'A comprehensive dashboard for monitoring and analyzing energy consumption, production, and emissions in smart cities. Empowering sustainable urban development through data-driven insights.',
   links: {
