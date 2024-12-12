@@ -1,13 +1,9 @@
 import { Suspense } from 'react';
 
-import { subMonths } from 'date-fns';
-
 import { CalendarDateRangePicker } from '@/components/date-range-picker';
 import { EnergyProductionSkeleton } from '@/components/skeletons/energy-production-skeleton';
 import { EnergySectorSkeleton } from '@/components/skeletons/energy-sector-skeleton';
 import { EnergySummarySkeleton } from '@/components/skeletons/summary-cards-skeleton';
-import { columns } from '@/components/table/columns';
-import { DataTable } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -17,27 +13,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DataTableWrapper } from '@/components/wrappers/data-table-wrapper';
 import { EnergyProductionWrapper } from '@/components/wrappers/energy-production-wrapper';
 import { EnergySectorWrapper } from '@/components/wrappers/energy-sector-wrapper';
 import { EnergySummaryWrapper } from '@/components/wrappers/summary-cards-wrapper';
-import { getWeeklyData } from '@/lib/db/actions/energy-actions';
 
-export default async function Home(props: {
-  searchParams: Promise<{ page?: string; pageSize?: string }>;
-}) {
-  const searchParams = await props.searchParams;
-
-  const page = parseInt(searchParams.page || '1');
-  const pageSize = parseInt(searchParams.pageSize || '10');
-  const endDate = new Date('2024-12-31');
-  const startDate = new Date('2024-01-01');
-
-  const { data, totalCount } = await getWeeklyData(
-    startDate,
-    endDate,
-    page,
-    pageSize
-  );
+export default function Home() {
   return (
     <div className="space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
@@ -93,13 +74,7 @@ export default async function Home(props: {
         </TabsContent>
         <TabsContent value="details">
           <Suspense fallback={<div>Loading...</div>}>
-            <DataTable
-              columns={columns}
-              data={data}
-              // totalCount={totalCount}
-              pageCount={Math.ceil(totalCount / pageSize)}
-              currentPage={page}
-            />
+            <DataTableWrapper />
           </Suspense>
         </TabsContent>
       </Tabs>
