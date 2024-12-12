@@ -3,8 +3,8 @@ import { PrismaClient, Sector } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  const startDate = new Date('2024-01-01');
-  const endDate = new Date('2024-12-31');
+  const startDate = new Date('2010-01-01');
+  const endDate = new Date('2020-01-01');
 
   for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 7)) {
     const weekData = generateWeekData(d);
@@ -76,4 +76,3 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
-
