@@ -51,29 +51,12 @@ export async function getSectorConsumption(
  * Retrieves weekly energy data with pagination support.
  * @param startDate - Start date for the data range
  * @param endDate - End date for the data range
- * @param page - Page number for pagination (default: 1)
- * @param pageSize - Number of items per page (default: 10)
- * @returns Promise containing paginated data, current page info, and total count
+ * @returns Promise containing weekly data and total count
  * @throws Error if data fetching fails
  */
-export async function getWeeklyData(
-  startDate: Date,
-  endDate: Date,
-  page: number = 1,
-  pageSize: number = 10
-) {
+export async function getWeeklyData(startDate: Date, endDate: Date) {
   try {
-    const {
-      data,
-      totalCount,
-      page: currentPage,
-      pageSize: currentPageSize,
-    } = await queries.fetchPaginatedWeeklyData(
-      startDate,
-      endDate,
-      page,
-      pageSize
-    );
+    const data = await queries.fetchWeeklyData(startDate, endDate);
 
     const formattedData = data.map(week => ({
       id: week.id,
@@ -85,12 +68,7 @@ export async function getWeeklyData(
       emissions: parseFloat(week.carbonEmissions.toFixed(2)),
     }));
 
-    return {
-      data: formattedData,
-      page: currentPage,
-      pageSize: currentPageSize,
-      totalCount,
-    };
+    return formattedData;
   } catch (error) {
     console.error('Error fetching energy data:', error);
     throw new Error('Failed to fetch energy data');

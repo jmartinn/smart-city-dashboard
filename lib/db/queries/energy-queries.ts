@@ -116,54 +116,26 @@ export async function fetchSectorConsumption(
  * Retrieves paginated weekly energy data within a date range.
  * @param startDate - Start of the date range
  * @param endDate - End of the date range
- * @param page - Page number (1-based)
- * @param pageSize - Number of records per page
- * @returns Promise containing paginated data and metadata
+ * @returns Promise containing weekly data
  */
-export async function fetchPaginatedWeeklyData(
-  startDate: Date,
-  endDate: Date,
-  page: number = 1,
-  pageSize: number = 10
-) {
-  const skip = (page - 1) * pageSize;
-
-  const [data, totalCount] = await Promise.all([
-    prisma.energyData.findMany({
-      where: {
-        weekStartDate: {
-          gte: startOfWeek(startDate),
-          lte: endOfWeek(endDate),
-        },
+export async function fetchWeeklyData(startDate: Date, endDate: Date) {
+  return prisma.energyData.findMany({
+    where: {
+      weekStartDate: {
+        gte: startOfWeek(startDate),
+        lte: endOfWeek(endDate),
       },
-      orderBy: {
-        id: 'asc',
-      },
-      skip,
-      take: pageSize,
-      select: {
-        id: true,
-        weekStartDate: true,
-        totalConsumption: true,
-        renewableEnergy: true,
-        nonRenewableEnergy: true,
-        carbonEmissions: true,
-      },
-    }),
-    prisma.energyData.count({
-      where: {
-        weekStartDate: {
-          gte: startOfWeek(startDate),
-          lte: endOfWeek(endDate),
-        },
-      },
-    }),
-  ]);
-
-  return {
-    data,
-    page,
-    pageSize,
-    totalCount,
-  };
+    },
+    orderBy: {
+      id: 'asc',
+    },
+    select: {
+      id: true,
+      weekStartDate: true,
+      totalConsumption: true,
+      renewableEnergy: true,
+      nonRenewableEnergy: true,
+      carbonEmissions: true,
+    },
+  });
 }
